@@ -1,0 +1,24 @@
+version: '3.8'
+ 
+services:
+  web:
+    image: <your-dockerhub-username>/flask-todo-app:latest
+    container_name: flask-todo-app
+    ports:
+      - "5000:5000"             # Map host port to container port
+    volumes:
+      - todo-data:/data         # Named volume — persists SQLite DB
+    networks:
+      - todo-network            # Attach to custom bridge network
+    environment:
+      - FLASK_ENV=production    # Production mode on Linux VM
+    restart: always             # Auto-restart if container crashes
+    user: "1000:1000"           # Run as non-root on Linux
+ 
+volumes:
+  todo-data:                    # Named volume for database persistence
+    driver: local
+ 
+networks:
+  todo-network:                 # Custom bridge network
+    driver: bridge
